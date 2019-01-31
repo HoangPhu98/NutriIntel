@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import ValueTable from './ValueTable/ValueTable';
+import NavBar from './Navigator/Navbar';
+import './App.css';
+import SimpleModal from './Modal';
 
 class App extends Component {
 
@@ -16,9 +20,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <NavBar />
+        <ValueTable />
         <button
           onClick={() => this._handleClick()}
         >CLick me</button>
+        <SimpleModal />
       </div>
     );
   }

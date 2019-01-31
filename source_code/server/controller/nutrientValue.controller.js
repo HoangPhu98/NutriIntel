@@ -42,8 +42,29 @@ const updateOne = (req, res, next) => {
     })
 }
 
+const deleteOne = (req, res, next) => {
+    NutrientValue
+    .where({_id: req.body._id})
+    .remove()
+    .exec((err, result) => {
+        if(err) {
+            return next(err);
+        } else {
+            res.json(result);
+            /**
+             * Result
+             *  {
+                    "n": 1, //0: Khong co ban nao dk xoa; 1 la co 1 ban
+                    "ok": 1
+                }
+             */
+        }
+    })
+}
+
 module.exports = {
     create,
     searchAll,
-    updateOne
+    updateOne,
+    deleteOne
 }
