@@ -1,6 +1,8 @@
 const NutrientValue = require('../model/NutrientValue.model');
+const xlsx = require('xlsx');
 
-/**
+
+ /**
  * 
  * @param {*} req has body json data same model
  * @param {*} res 
@@ -62,9 +64,20 @@ const deleteOne = (req, res, next) => {
     })
 }
 
+const importData = (req, res, next) => {
+    console.log(req.file);
+    let workbook = xlsx.readFile('uploads/' + req.file.filename);
+    let sheet_name_list = workbook.SheetNames;
+    let xlData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+    console.log(xlData);
+    //Proccess save data to database: create new and update
+    res.json(xlData);
+}
+
 module.exports = {
     create,
     searchAll,
     updateOne,
-    deleteOne
+    deleteOne,
+    importData
 }
