@@ -4,8 +4,10 @@ import 'react-table/react-table.css';
 import './styles.css';
 import {Button} from '@material-ui/core';
 import axios from 'axios';
-import ModalRecord from '../Modal/Modal';
+import ModalAddRecord from '../Modal/ModalAddRecord';
 import {config} from '../config';
+import ModalUpdate from "../Modal/ModalUpdate";
+import ModalDetail from "../Modal/ModalDetails";
 
 class ValueTable extends Component {
     constructor(props) {
@@ -18,9 +20,9 @@ class ValueTable extends Component {
             }
         }
 
-        this._handleEditRow = this._handleEditRow.bind(this);
         this._handleDeleteRow = this._handleDeleteRow.bind(this);
         this._addNutrient = this._addNutrient.bind(this);
+        this._updateNutrient = this._updateNutrient.bind(this)
     }
 
 
@@ -30,37 +32,52 @@ class ValueTable extends Component {
         })
     }
 
-   componentDidMount() {
-       axios({
-            method: 'get',
-            url: config.host + ':' + config.port + '/' + config.paramTable + '/' + config.paramGetAll,
-            responseType: 'json'
+    _updateNutrient = (dataUpdated) => {
+        axios({
+            method: 'post',
+            responseType: 'json',
+            url: `${config.host}:${config.port}/${config.paramTable}/${config.paramUpdateOne}`,
+            data: dataUpdated
         })
         .then(res => {
-            this.setState({valNutri: res.data})
-        });
-   } 
-
-    _handleEditRow = (value) => {
-        console.log(value)
+            const {valNutri} = this.state
+            valNutri.forEach(element => {
+                if(element._id === dataUpdated._id) {
+                    element = dataUpdated
+                }
+            });
+            this.setState({valNutri: valNutri})
+        })
+        .catch(e => e)
     }
 
+    componentDidMount() {
+        axios({
+                method: 'get',
+                url: config.host + ':' + config.port + '/' + config.paramTable + '/' + config.paramGetAll,
+                responseType: 'json'
+            })
+            .then(res => {
+                this.setState({valNutri: res.data})
+            });
+    } 
+
     _handleDeleteRow = (value) => {
-        const isNotId = item => item._id !== value._id;
-        const updatedList = this.state.valNutri.filter(isNotId);
+        const isNotId = item => item._id !== value._id
+        const updatedList = this.state.valNutri.filter(isNotId)
         axios({
             method: 'post',
             url: config.host + ':' + config.port + '/' + config.paramTable + '/' + config.paramDeleteOne,
             data: value,
             responseType: 'json'
-        })
-        .then(res => {
-            if(res.data.n === 1){
-                alert("Xoa thanh cong");
-                this.setState({
-                    valNutri: updatedList
-                })
-            }
+            })
+            .then(res => {
+                if(res.data.n === 1){
+                    alert("Xoa thanh cong");
+                    this.setState({
+                        valNutri: updatedList
+                    })
+                }
             // {
             //     config: {
             //         adapter: ƒ,
@@ -92,41 +109,73 @@ class ValueTable extends Component {
         })
     }
 
+    
 
 
     render() {
+        const {valNutri} = this.state;
+
+
+        const makePlaceholderFilter = placeholder => ({filter, onChange}) => (
+                <input type='text'
+                    placeholder={placeholder}
+                    style={{
+                    width: '100%'
+                    }}
+                    value={filter ? filter.value : ''}
+                    onChange={(event) => onChange(event.target.value)}
+                />
+        )
+
         const columns = [{
                 Header: 'ID',
                 accessor: '_id',
                 show: false
             },{
                 Header: 'Name_en',
-                accessor: 'name_en'
+                accessor: 'name_en',
+                Filter: (makePlaceholderFilter('Search for English name'))
             }, {
                 Header: "Name_vi",
                 accessor: 'name_vi',
+                Filter: (makePlaceholderFilter('Search for Vietnamese name'))
             },{
                 Header: 'Action',
                 Cell: row => (
                     <div>
-                        <button onClick={() => this._handleEditRow(row.original)}>Edit</button>
+                        <button><ModalDetail title='Detail' data={row.original} /></button>
+                        <button><ModalUpdate title='Edit' data={row.original} updateNutrient={this._updateNutrient} /></button>
                         <button onClick={() => this._handleDeleteRow(row.original)}>Delete</button>
                     </div>
-                )
+                ),
+                filterable: false
             }]
 
-        const {valNutri} = this.state;
+        
+        const filterCaseInsensitive = (filter, row) => {
+            const id = filter.pivotId || filter.id;
+            return (
+                row[id] !== undefined ?
+                String(row[id].toLowerCase()).startsWith(filter.value.toLowerCase()) :
+                true
+            );
+        }
+
+
         return (
             <div>
                 <Button variant="contained" color="default" >Import data</Button>
-                <Button variant="contained" color="default" >Export data</Button>
-                <Button variant="contained" color="default" ><ModalRecord addNutrient={this._addNutrient} title='Add record' /></Button>
+                <Button variant="contained" color="default" ><ModalAddRecord addNutrient={this._addNutrient} title='Add record' /></Button>
                 { valNutri &&
                 <ReactTable
                     className = '-striped -highlight'
                     data={this.state.valNutri}
                     columns={columns}
-                    defaultPageSize = {10}
+                    defaultPageSize={10}
+                    filterable={true}
+                    defaultFilterMethod={
+                        (filter, row) => filterCaseInsensitive(filter, row)
+                    }
                     />
                 }
             </div>

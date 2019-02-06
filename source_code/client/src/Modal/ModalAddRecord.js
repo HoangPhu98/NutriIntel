@@ -7,7 +7,7 @@ import {config} from '../config';
 
 function getModalStyle() {
 	const top = 10;
-	const left = 40;
+	const left = 25;
 
 	return {
 		top: `${top}%`,
@@ -15,11 +15,10 @@ function getModalStyle() {
 	};
 }
   
-
 const styles = theme => ({
   paper: {
     position: 'absolute',
-    width: theme.spacing.unit * 50,
+    width: '50%',
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 2,
@@ -27,7 +26,7 @@ const styles = theme => ({
   },
 });
 
-class ModalRecord extends Component {
+class ModalAddRecord extends Component {
 
 	constructor(props) {
 		super(props);
@@ -58,6 +57,8 @@ class ModalRecord extends Component {
 		this.setState({
 			formData: data
 		});
+
+		console.log('success!')
 	}
 
 	_handleSubmit = (event) => {
@@ -132,9 +133,9 @@ class ModalRecord extends Component {
 	}
 }
 
-ModalRecord.propTypes = {
+ModalAddRecord.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
 // We need an intermediary variable for handling the recursive nesting.
-export default withStyles(styles)(ModalRecord);
+export default withStyles(styles)(ModalAddRecord);

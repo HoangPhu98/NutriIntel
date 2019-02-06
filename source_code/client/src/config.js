@@ -3,7 +3,8 @@ const config = {
     port: 3001,
     paramTable: 'nutrientValue',
     paramGetAll: 'all',
-    paramDeleteOne: 'deleteOne'
+    paramDeleteOne: 'deleteOne',
+    paramUpdateOne: 'updateOne'
 }
 
 module.exports = {config};
