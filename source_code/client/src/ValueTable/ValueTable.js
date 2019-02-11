@@ -8,6 +8,7 @@ import ModalAddRecord from '../Modal/ModalAddRecord';
 import {config} from '../config';
 import ModalUpdate from "../Modal/ModalUpdate";
 import ModalDetail from "../Modal/ModalDetails";
+import ModalImportData from "../Modal/ModalImportData";
 
 class ValueTable extends Component {
     constructor(props) {
@@ -23,10 +24,11 @@ class ValueTable extends Component {
         this._handleDeleteRow = this._handleDeleteRow.bind(this);
         this._addNutrient = this._addNutrient.bind(this);
         this._updateNutrient = this._updateNutrient.bind(this)
+        this._importData = this._importData.bind(this)
     }
 
 
-    _addNutrient(newNutrient) {
+    _addNutrient = (newNutrient) => {
         this.setState({
             valNutri: [...this.state.valNutri, newNutrient]
         })
@@ -51,15 +53,28 @@ class ValueTable extends Component {
         .catch(e => e)
     }
 
+    _importData = () => {
+        axios({
+            method: 'get',
+            url: config.host + ':' + config.port + '/' + config.paramTable + '/' + config.paramGetAll,
+            responseType: 'json'
+        })
+        .then(res => {
+            this.setState({
+                valNutri: res.data
+            })
+        });
+    }
+
     componentDidMount() {
         axios({
-                method: 'get',
-                url: config.host + ':' + config.port + '/' + config.paramTable + '/' + config.paramGetAll,
-                responseType: 'json'
-            })
-            .then(res => {
-                this.setState({valNutri: res.data})
-            });
+            method: 'get',
+            url: config.host + ':' + config.port + '/' + config.paramTable + '/' + config.paramGetAll,
+            responseType: 'json'
+        })
+        .then(res => {
+            this.setState({valNutri: res.data})
+        });
     } 
 
     _handleDeleteRow = (value) => {
@@ -71,41 +86,18 @@ class ValueTable extends Component {
             data: value,
             responseType: 'json'
             })
-            .then(res => {
-                if(res.data.n === 1){
-                    alert("Xoa thanh cong");
-                    this.setState({
-                        valNutri: updatedList
-                    })
-                }
-            // {
-            //     config: {
-            //         adapter: ƒ,
-            //         transformRequest: {…},
-            //         transformResponse: {…},
-            //         timeout: 0,
-            //         xsrfCookieName: "XSRF-TOKEN",
-            //         …
-            //     }
-            //     data: {
-            //         n: 1,
-            //         ok: 1
-            //     }
-            //     headers: {
-            //         content - type: "application/json; charset=utf-8"
-            //     }
-            //     request: XMLHttpRequest {
-            //         onreadystatechange: ƒ,
-            //         readyState: 4,
-            //         timeout: 0,
-            //         withCredentials: false,
-            //         upload: XMLHttpRequestUpload,
-            //         …
-            //     }
-            //     status: 200
-            //     statusText: "OK"
-            //     __proto__: Object
-            // }
+        .then(res => {
+            if(res.data.n === 1){
+                alert("Xoa thanh cong");
+                this.setState({
+                    valNutri: updatedList
+                })
+            }else{
+                alert("Xoa that bai");        
+            }
+        })
+        .catch(err => {
+            console.log(err)
         })
     }
 
@@ -117,14 +109,14 @@ class ValueTable extends Component {
 
 
         const makePlaceholderFilter = placeholder => ({filter, onChange}) => (
-                <input type='text'
-                    placeholder={placeholder}
-                    style={{
-                    width: '100%'
-                    }}
-                    value={filter ? filter.value : ''}
-                    onChange={(event) => onChange(event.target.value)}
-                />
+            <input type='text'
+                placeholder={placeholder}
+                style={{
+                width: '100%'
+                }}
+                value={filter ? filter.value : ''}
+                onChange={(event) => onChange(event.target.value)}
+            />
         )
 
         const columns = [{
@@ -132,14 +124,38 @@ class ValueTable extends Component {
                 accessor: '_id',
                 show: false
             },{
-                Header: 'Name_en',
-                accessor: 'name_en',
-                Filter: (makePlaceholderFilter('Search for English name'))
+                Header: 'Name',
+                accessor: 'name',
+                Filter: (makePlaceholderFilter('Search for name'))
             }, {
-                Header: "Name_vi",
-                accessor: 'name_vi',
-                Filter: (makePlaceholderFilter('Search for Vietnamese name'))
+                Header: 'Amount',
+                accessor: 'amount',
+                filterable: false
             },{
+                Header: "Energy",
+                accessor: 'energyC',
+                filterable: false
+            }, {
+                Header: "Protein",
+                accessor: 'protein',
+                filterable: false
+            }, {
+                Header: 'Carbohydrate',
+                accessor: 'carbohydrate',
+                filterable: false
+            }, {
+                Header: 'Total Sugar',
+                accessor: 'totalSugar',
+                filterable: false
+            }, {
+                Header: 'Fat',
+                accessor: 'fat',
+                filterable: false
+            }, {
+                Header: 'Calcium',
+                accessor: 'calcium',
+                filterable: false
+            }, {
                 Header: 'Action',
                 Cell: row => (
                     <div>
@@ -164,7 +180,7 @@ class ValueTable extends Component {
 
         return (
             <div>
-                <Button variant="contained" color="default" >Import data</Button>
+                <Button variant="contained" color="default" ><ModalImportData importData={this._importData} title='Import data' /></Button>
                 <Button variant="contained" color="default" ><ModalAddRecord addNutrient={this._addNutrient} title='Add record' /></Button>
                 { valNutri &&
                 <ReactTable

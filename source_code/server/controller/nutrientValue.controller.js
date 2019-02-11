@@ -47,7 +47,7 @@ const updateOne = (req, res, next) => {
 const deleteOne = (req, res, next) => {
     NutrientValue
     .where({_id: req.body._id})
-    .remove()
+    .deleteOne()
     .exec((err, result) => {
         if(err) {
             return next(err);
@@ -65,12 +65,32 @@ const deleteOne = (req, res, next) => {
 }
 
 const importData = (req, res, next) => {
-    console.log(req.file);
-    let workbook = xlsx.readFile('uploads/' + req.file.filename);
-    let sheet_name_list = workbook.SheetNames;
-    let xlData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
-    console.log(xlData);
-    //Proccess save data to database: create new and update
+    
+    let workbook = xlsx.readFile('uploads/' + req.file.filename)
+    let sheet_name_list = workbook.SheetNames
+    let xlData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
+    
+    let skip = true;
+
+    xlData.forEach(item => {
+        if(skip) {
+            skip = false
+        } else {
+            var record = new NutrientValue(item)
+            /**
+             * Validate data in here
+             * 
+             * 
+             */
+
+            record.save(err => {
+                if (err) {
+                    return next(err);
+                }
+            })
+        }
+    })
+
     res.json(xlData);
 }
 

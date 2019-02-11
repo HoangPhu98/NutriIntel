@@ -4,7 +4,8 @@ const config = {
     paramTable: 'nutrientValue',
     paramGetAll: 'all',
     paramDeleteOne: 'deleteOne',
-    paramUpdateOne: 'updateOne'
+    paramUpdateOne: 'updateOne',
+    paramImport: 'importData'
 }
 
 module.exports = {config};

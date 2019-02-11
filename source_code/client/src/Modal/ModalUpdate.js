@@ -107,8 +107,6 @@ class ModalUpdate extends Component {
             </div>
         )
     }
-
-
 }
 
 ModalUpdate.propTypes = {
