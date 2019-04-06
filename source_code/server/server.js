@@ -6,7 +6,7 @@ const config = require('./config');
 
 
 const nutrientValueAPI = require('./api-routes/nutrientValue.api')
-
+const optimizeAPI = require("./api-routes/optimize.api")
 
 const app = express();
 
@@ -36,5 +36,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/nutrientValue', nutrientValueAPI);
+app.use('/optimize', optimizeAPI);
+
 
 app.listen(config.app.port, () => console.log('Server running at port: ' + config.app.port));
