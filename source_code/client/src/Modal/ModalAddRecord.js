@@ -1,13 +1,34 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import {Modal} from '@material-ui/core';
+import {
+	withStyles,
+	Modal,
+    Card,
+    CardHeader,
+    CardContent,
+    Table,
+    TableRow,
+    TableBody,
+    TableCell,
+    CardActions,
+} from '@material-ui/core';
 import axios from 'axios';
 import {config} from '../config';
 
+const CustomTableCell = withStyles(theme => ({
+	head: {
+		backgroundColor: theme.palette.common.black,
+		color: theme.palette.common.white,
+	},
+	body: {
+		fontSize: 14,
+	},
+}))(TableCell);
+
+
 function getModalStyle() {
-	const top = 10;
-	const left = 25;
+	const top = 7;
+	const left = 30;
 
 	return {
 		top: `${top}%`,
@@ -16,26 +37,36 @@ function getModalStyle() {
 }
   
 const styles = theme => ({
-  paper: {
-    position: 'absolute',
-    width: '50%',
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 2,
-    outline: 'none',
-  },
+  plat: {
+  		width: '40%',
+  		ountline: 'none',
+  		padding: theme.spacing.unit * 2,
+  		boxShadow: theme.shadows[5],
+  		backgroundColor: theme.palette.background.paper,
+  		position: 'absolute'
+  	},
+  	wrapTable: {
+  		overflow: 'auto',
+  		height: '390px'
+  	},
+  	table: {
+  		tableLayout: 'fixed'
+  	},
+  	row: {
+  		'&:nth-of-type(odd)': {
+  			backgroundColor: theme.palette.background.default,
+  		},
+  	}
 });
 
 class ModalAddRecord extends Component {
 
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			open: false,
-			formData: {
-				name_en: '',
-				name_vi: ''
-			}
+			formData: null
 		}
 
 		this._handleChange = this._handleChange.bind(this);
@@ -44,21 +75,37 @@ class ModalAddRecord extends Component {
 		this._handleClose = this._handleClose.bind(this);
 	}
 
+	componentWillMount() {
+		const {unit} = this.props
+		
+		var formDataV = {}
+
+		unit.fields.map((element, index) =>	{
+			if(element.unit_1 === "") {
+				formDataV[element.key] = "";
+			} else {
+				formDataV[element.key] = 0;
+			}
+		})
+		if(this.state.formData === null){
+			setTimeout(() => {
+				this.setState({formData: formDataV})
+				console.log(this.state.formData)
+			}, 300);
+		}
+	}
+
 	_handleChange = (event) => {
 		const target = event.target;
 		let data = this.state.formData;
 
-		if (target.name === 'name_en') {
-			data.name_en = target.value;
-		} 
-		if (target.name === 'name_vi') {
-			data.name_vi = target.value;
-		}
+		data[target.name] = target.value;
+
 		this.setState({
 			formData: data
-		});
+		})
 
-		console.log('success!')
+		//Xu ly tuong thic giau don vi Kj va calo
 	}
 
 	_handleSubmit = (event) => {
@@ -85,49 +132,68 @@ class ModalAddRecord extends Component {
 	};
 
 	render() {
-		const { classes } = this.props;
+		const {unit, classes} = this.props
+		const {formData} = this.state
 
 		return (
 		<div>
 			<span onClick={this._handleOpen}>{this.props.title}</span>
+			{ unit !== null && formData !== null &&
 			<Modal
 			aria-labelledby="simple-modal-title"
 			aria-describedby="simple-modal-description"
 			open={this.state.open}
 			onClose={this._handleClose}
 			>
-			<div style={getModalStyle()} className={classes.paper}>
-				<table>
-				<tbody>
-				<tr>
-					<td>Name English</td>
-					<td><input 
-						type='text' 
-						name='name_en'
-						value={this.state.formData.name_en}
-						onChange={this._handleChange} />
-					</td>
-				</tr>
-				<tr>
-					<td>Name Vietnam</td>
-					<td><input 
-						type='text' 
-						name='name_vi'
-						value={this.state.formData.name_vi}
-						onChange={this._handleChange} />
-					</td>
-				</tr>
-				<tr>
-					<td><input 
-						type='submit' 
-						value='submit'
-						onClick={this._handleSubmit} />
-					</td>
-				</tr>
-				</tbody>
-				</table>
-			</div>
+				<Card style={getModalStyle()} className={classes.plat}>
+					<CardHeader
+						title="Add Food"
+						style={{textAlign: 'center'}}
+					>
+					</CardHeader>
+					<CardContent>
+						< div className={classes.wrapTable} >
+						<Table className={classes.table}>
+							<TableBody
+							>
+								{unit.fields.map((nutrient, index) => (
+									<TableRow key={index} className={classes.row}>
+										<CustomTableCell component="th" scope="row">
+											{nutrient.name} 
+										</CustomTableCell>
+										<CustomTableCell align="right">
+										{ index < 4 && 
+											<input 
+												type='text'
+												name={nutrient.key} 
+												value={formData[nutrient.key]} 
+												onChange={this._handleChange}
+											/>
+										}
+										{ index > 3 &&
+											<input
+												type='number'
+												name={nutrient.key} 
+												value={formData[nutrient.key]} 
+												onChange={this._handleChange}
+											/>
+										}
+										</CustomTableCell>
+										<CustomTableCell align="left" style={{width: '30px'}}>
+											{nutrient.unit_1 !== '' && nutrient.unit_1}
+										</CustomTableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+						</div>
+					</CardContent>
+					<CardActions>
+						<input type='submit' value='Create New' onClick={this._handleSubmit} />
+					</CardActions>
+				</Card>
 			</Modal>
+			}
 		</div>
 		);
 	}
@@ -137,5 +203,4 @@ ModalAddRecord.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-// We need an intermediary variable for handling the recursive nesting.
 export default withStyles(styles)(ModalAddRecord);

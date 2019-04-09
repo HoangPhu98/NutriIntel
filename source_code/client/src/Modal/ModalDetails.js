@@ -1,10 +1,32 @@
 import React, {Component} from 'react'
 import { PropTypes } from 'prop-types'
-import {withStyles, Modal} from "@material-ui/core"
+import {
+    withStyles,
+    Modal,
+    Table,
+    TableBody,
+    TableRow,
+    TableCell,
+    Card,
+    CardHeader,
+    CardContent,
+    Typography
+} from "@material-ui/core";
+
+
+const CustomTableCell = withStyles(theme => ({
+    head: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+    },
+    body: {
+        fontSize: 14,
+    },
+}))(TableCell);
 
 function getModalStyle() {
-    const top = 10
-    const left = 25
+    const top = 7
+    const left = 30
 
     return {
         top: `${top}%`,
@@ -13,13 +35,25 @@ function getModalStyle() {
 }
 
 const styles = theme => ({
-    paper: {
-        width: '50%',
+    plat: {
+        width: '40%',
         outline: 'none',
         padding: theme.spacing.unit * 2,
         boxShadow: theme.shadows[5],
         backgroundColor: theme.palette.background.paper,
         position: 'absolute'
+    },
+    wrapTable: {
+        overflow: 'auto',
+        height: '390px'
+    },
+    table: {
+        tableLayout: 'fixed'
+    }, 
+    row: {
+         '&:nth-of-type(odd)': {
+             backgroundColor: theme.palette.background.default,
+         },
     }
 })
 
@@ -47,8 +81,10 @@ class ModalDetail extends Component {
     }
 
     render() {
-        const {classes, data} = this.props;
+        const {classes, data, unit} = this.props;
+
         return (
+           data !== null && unit !== null &&
             <div>
                 <span onClick={this._handleOpen}>{this.props.title}</span>
                 <Modal
@@ -57,27 +93,42 @@ class ModalDetail extends Component {
                     open={this.state.openModal}
                     onClose={this._handleClose}
                 >
-                    <div style={getModalStyle()} className={classes.paper}>
-                        <span>View all details of food</span>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>ID</td>
-                                    <td>{data._id}</td>
-                                </tr>
-                                <tr>
-                                    <td>Name English</td>
-                                    <td>
-                                        {data.name_en}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Name Vietname</td>
-                                    <td>{data.name_vi}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <Card style={getModalStyle()} className={classes.plat}>
+                        <CardHeader
+                            title={data.name}
+                            style={{textAlign: 'center'}}
+                        >
+                        </CardHeader>
+                        <CardContent>
+                            <Typography component="div">
+                                <div>Group: {data.type}</div>
+                                <div>Other Name: {data.generalName}</div>
+                                {data.description !== '-' &&
+                                    <div>{data.description}</div>
+                                }
+                                <div style={{fontStyle: 'italic'}}>Nutrient in {data.amount}{unit.fields[3].unit_2}</div>
+                            </Typography>
+                            < div className={classes.wrapTable} >
+                            <Table className={classes.table}>
+                                <TableBody
+                                >
+                                    {unit.fields.map((nutrient, index) => (
+                                        index > 4 &&
+                                        <TableRow key={index} className={classes.row}>
+                                            <CustomTableCell component="th" scope="row">
+                                                {nutrient.name} 
+                                            </CustomTableCell>
+                                            <CustomTableCell align="right">
+                                                {data[nutrient.key]} {nutrient.unit_2}
+                                            </CustomTableCell>
+
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </Modal>
             </div>
         )

@@ -5,7 +5,8 @@ const config = {
     paramGetAll: 'all',
     paramDeleteOne: 'deleteOne',
     paramUpdateOne: 'updateOne',
-    paramImport: 'importData'
+    paramImport: 'importData',
+    paramUnit: 'unit'
 }
 
 module.exports = {config};

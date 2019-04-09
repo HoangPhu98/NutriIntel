@@ -2,15 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var NutrientValue = new Schema({
-    // name_vi: String,
-    // name_en: String
     name: String,
     generalName: String,
     description: String,
     type: String,
     amount: Number,
     energyC: Number,
-    energeJ: Number,
+    energyJ: Number,
     protein: Number,
     fat: Number,
     carbohydrate: Number,
@@ -42,7 +40,7 @@ var NutrientValue = new Schema({
     vitaminE: Number,
     vitaminK: Number,
     betaCaroten: Number,
-    alphaCaronten: Number,
+    alphaCaroten: Number,
     lycopen: Number,
     totalIsoflavone: Number,
     totalAcid: Number,
@@ -50,4 +48,4 @@ var NutrientValue = new Schema({
     phytosterol: Number
 });
 
-module.exports = mongoose.model('nutrient_value', NutrientValue);
+module.exports = mongoose.model('nutrient_values', NutrientValue);

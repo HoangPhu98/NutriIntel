@@ -18,7 +18,8 @@ class ValueTable extends Component {
             formData: {
                 name_en: '',
                 name_vi: ''
-            }
+            },
+            unitProcess: null  //Array unit
         }
 
         this._handleDeleteRow = this._handleDeleteRow.bind(this);
@@ -36,10 +37,10 @@ class ValueTable extends Component {
 
     _updateNutrient = (dataUpdated) => {
         axios({
-            method: 'post',
-            responseType: 'json',
+            method: 'POST',
             url: `${config.host}:${config.port}/${config.paramTable}/${config.paramUpdateOne}`,
-            data: dataUpdated
+            data: dataUpdated,
+            responseType: 'json'
         })
         .then(res => {
             const {valNutri} = this.state
@@ -75,6 +76,16 @@ class ValueTable extends Component {
         .then(res => {
             this.setState({valNutri: res.data})
         });
+
+        axios({
+            medthod: 'get',
+            url: `${config.host}:${config.port}/${config.paramUnit}`,
+            responseType: 'json'
+        })
+        .then(res => {
+            // this.setState({unitProcess: res.data[0].fields})
+            this.setState({unitProcess: res.data[0]})
+        })
     } 
 
     _handleDeleteRow = (value) => {
@@ -101,12 +112,10 @@ class ValueTable extends Component {
         })
     }
 
-    
 
 
     render() {
-        const {valNutri} = this.state;
-
+        const {valNutri, unitProcess} = this.state;
 
         const makePlaceholderFilter = placeholder => ({filter, onChange}) => (
             <input type='text'
@@ -159,8 +168,8 @@ class ValueTable extends Component {
                 Header: 'Action',
                 Cell: row => (
                     <div>
-                        <button><ModalDetail title='Detail' data={row.original} /></button>
-                        <button><ModalUpdate title='Edit' data={row.original} updateNutrient={this._updateNutrient} /></button>
+                        <button><ModalDetail title='Detail' data={row.original} unit={unitProcess}/></button>
+                        <button><ModalUpdate title='Edit' data={row.original} unit={unitProcess} updateNutrient={this._updateNutrient} /></button>
                         <button onClick={() => this._handleDeleteRow(row.original)}>Delete</button>
                     </div>
                 ),
@@ -179,9 +188,10 @@ class ValueTable extends Component {
 
 
         return (
+            valNutri !== null && unitProcess !== null &&
             <div>
                 <Button variant="contained" color="default" ><ModalImportData importData={this._importData} title='Import data' /></Button>
-                <Button variant="contained" color="default" ><ModalAddRecord addNutrient={this._addNutrient} title='Add record' /></Button>
+                <Button variant="contained" color="default" ><ModalAddRecord unit={unitProcess} addNutrient={this._addNutrient} title='Add record' /></Button>
                 { valNutri &&
                 <ReactTable
                     className = '-striped -highlight'
@@ -194,6 +204,7 @@ class ValueTable extends Component {
                     }
                     />
                 }
+                <Button>Download Sample Import</Button>
             </div>
         )
     }
