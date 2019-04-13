@@ -39,7 +39,7 @@ function getModalStyle() {
 const styles = theme => ({
   plat: {
   		width: '40%',
-  		ountline: 'none',
+  		outline: 'none',
   		padding: theme.spacing.unit * 2,
   		boxShadow: theme.shadows[5],
   		backgroundColor: theme.palette.background.paper,
@@ -86,11 +86,12 @@ class ModalAddRecord extends Component {
 			} else {
 				formDataV[element.key] = 0;
 			}
+			return null;
 		})
+
 		if(this.state.formData === null){
 			setTimeout(() => {
 				this.setState({formData: formDataV})
-				console.log(this.state.formData)
 			}, 300);
 		}
 	}

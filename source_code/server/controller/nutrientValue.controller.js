@@ -76,12 +76,12 @@ const importData = (req, res, next) => {
         if(skip) {
             skip = false
         } else {
-            var record = new NutrientValue(item)
             /**
              * Validate data in here
              * 
              * 
              */
+            var record = new NutrientValue(item)
 
             record.save(err => {
                 if (err) {

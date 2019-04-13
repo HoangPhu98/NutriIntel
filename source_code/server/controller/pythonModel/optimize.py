@@ -58,7 +58,6 @@ def solveModelMin(food, conditionNutri):
             "weight": food_result
         }
     else:
-        print('This is bug. hahaha')
         return {
             "status": 3,
             "cost": 0,
@@ -167,7 +166,7 @@ def main():
     conditionNutri = inp['conditionNutri']
 
     convertUnicodeToAscii(food, conditionNutri)
-
+    
     data = solveProblem(food, conditionNutri)
     print(json.dumps(data))
 

@@ -5,10 +5,9 @@ var Menu = new Schema({
     name: String,
     description: String,
     createAt: Date,
-    // author: String
     ingredient: {
         energyC: [Number],
-        energeJ: [Number],
+        energyJ: [Number],
         protein: [Number],
         fat: [Number],
         carbohydrate: [Number],
@@ -17,6 +16,7 @@ var Menu = new Schema({
         totalSugar: [Number],
         calcium: [Number],
         iron: [Number],
+        magnesium: [Number],
         manganese: [Number],
         phosphorous: [Number],
         patassium: [Number],
@@ -39,7 +39,7 @@ var Menu = new Schema({
         vitaminE: [Number],
         vitaminK: [Number],
         betaCaroten: [Number],
-        alphaCaronten: [Number],
+        alphaCaroten: [Number],
         lycopen: [Number],
         totalIsoflavone: [Number],
         totalAcid: [Number],
@@ -50,4 +50,4 @@ var Menu = new Schema({
 
 
 
-module.exports = mongoose.Model('meal_plans', Menu)
+module.exports = mongoose.model('meal_plans', Menu)

@@ -8,26 +8,27 @@ const config = require('./config');
 const nutrientValueAPI = require('./api-routes/nutrientValue.api')
 const optimizeAPI = require("./api-routes/optimize.api")
 const unitAPI = require('./api-routes/unit.api')
+const mealPlanAPI = require('./api-routes/mealPlans.api')
+const priceAPI = require('./api-routes/prices.api')
 
+const app = express()
 
-const app = express();
-
-app.use(bodyParse.urlencoded({extended: false}));
-app.use(bodyParse.json());
-app.use(logger('dev'));
+app.use(bodyParse.urlencoded({extended: false}))
+app.use(bodyParse.json())
+app.use(logger('dev'))
 
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    next()
 });
 
-var connectionString = 'mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name;
-mongoose.connect(connectionString, {useNewUrlParser: true});
-mongoose.Promise = global.Promise;
+var connectionString = 'mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name
+mongoose.connect(connectionString, {useNewUrlParser: true})
+mongoose.Promise = global.Promise
 
 mongoose.connection.on('connected', () => {
-    console.log("Mongoose default connection is open to " + connectionString);
+    console.log("Mongoose default connection is open to " + connectionString)
 })
 
 
@@ -37,8 +38,10 @@ app.get('/', (req, res) => {
     })
 });
 
-app.use('/nutrientValue', nutrientValueAPI);
-app.use('/optimize', optimizeAPI);
+app.use('/nutrientValue', nutrientValueAPI)
+app.use('/optimize', optimizeAPI)
 app.use('/unit', unitAPI)
+app.use('/mealPlan', mealPlanAPI)
+app.use('/price', priceAPI)
 
-app.listen(config.app.port, () => console.log('Server running at port: ' + config.app.port));
+app.listen(config.app.port, () => console.log('Server running at port: ' + config.app.port))

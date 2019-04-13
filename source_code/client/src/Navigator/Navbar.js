@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import { AppBar, Toolbar, Typography, Tab, Tabs } from '@material-ui/core'
+import { AppBar, Typography, Tab, Tabs } from '@material-ui/core'
 
 import ValueTable from '../ValueTable/ValueTable'
 import Home from '../Home/Home'
