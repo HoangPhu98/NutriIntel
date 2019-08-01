@@ -8,27 +8,27 @@ const xlsx = require('xlsx');
  * @param {*} res 
  * @param {*} next 
  */
-const create = (req, res, next) => {
-    console.log(req.body);
-    var nutrientValue = new NutrientValue(req.body);
-    nutrientValue.save((err) => {
-        if (err) {
-            return next(err);
-        } else {
-            res.json(nutrientValue);
-        }
-    });
+
+
+const create = async (nutrientValue) => {
+    let xnutrientValue = new NutrientValue(nutrientValue)
+
+    try {
+        const newNutrient = await xnutrientValue.save();
+        return {err: undefined ,data: newNutrient}
+    } catch(err) {
+        return {err, data: undefined}
+    }
+
 }
 
-const searchAll = (req, res, next) => {
-    NutrientValue.find({})
-    .exec((err, allNutrient) => {
-        if(err) {
-            return next(err);
-        } else {
-            res.json(allNutrient);
-        }
-    })
+const searchAll = async () => {
+    try {
+        const nutrients = await NutrientValue.find({});
+        return {err: undefined, data: nutrients}
+    } catch(err) {
+        return {err, data: undefined}
+    }
 }
 
 const updateOne = (req, res, next) => {

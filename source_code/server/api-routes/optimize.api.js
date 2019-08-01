@@ -1,6 +1,6 @@
 const express = require("express")
 const Router = express.Router()
-const OptimizeController = require("../controller/optimize.controller")
+const OptimizeController = require("../helpers/optimize.helper")
 
 Router.post('/', OptimizeController.requestOpt)
 

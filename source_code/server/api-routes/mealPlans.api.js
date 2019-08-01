@@ -1,6 +1,6 @@
 const express = require('express')
 const Router = express.Router()
-const mealPlanController = require('../controller/mealPans.controller')
+const mealPlanController = require('../helpers/mealPans.helper')
 const multer = require('multer')
 const upload = multer({dest: 'uploads/'})
 
