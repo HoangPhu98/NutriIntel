@@ -1,18 +1,17 @@
-const Unit = require("../model/Unit.model")
+"use strict";
 
+var Unit = require("../model/Unit.model");
 
-const searchAll = (req, res, next) => {
-    Unit
-    .find({})
-    .exec((err, unit) => {
-        if(err) {
+var searchAll = function searchAll(req, res, next) {
+    Unit.find({}).exec(function (err, unit) {
+        if (err) {
             return next(err);
         } else {
-            res.json(unit)
+            res.json(unit);
         }
-    })
-}
+    });
+};
 
 module.exports = {
-    searchAll
-}
+    searchAll: searchAll
+};

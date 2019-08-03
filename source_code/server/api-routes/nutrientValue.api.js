@@ -1,15 +1,18 @@
-const express = require('express');
-const Router = express.Router();
-const nutrientValueContoller = require('../controllers/nutrientValue.controller');
-const nux = require('../helpers/nutrientValue.helper')
-const multer = require('multer');
-const upload = multer({dest: 'uploads/'});
-const validations = require('./validation/nutrientValue.validation');
+'use strict';
 
-const { check, validationResult } = require('express-validator');
+var express = require('express');
+var Router = express.Router();
+var nutrientValueContoller = require('../controllers/nutrientValue.controller');
+var nux = require('../helpers/nutrientValue.helper');
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' });
+var validations = require('./validation/nutrientValue.validation');
 
+var _require = require('express-validator'),
+    check = _require.check,
+    validationResult = _require.validationResult;
 
-Router.post('/' , validations.createNutrient, nutrientValueContoller.createNutrient);
+Router.post('/', validations.createNutrient, nutrientValueContoller.createNutrient);
 Router.get('/all', nutrientValueContoller.getAllNutrient);
 Router.post('/updateOne', nux.updateOne);
 Router.post('/deleteOne', nux.deleteOne);

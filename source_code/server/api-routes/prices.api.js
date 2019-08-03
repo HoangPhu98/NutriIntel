@@ -1,7 +1,9 @@
-const express = require("express")
-const Router = express.Router()
-const PriceController = require("../helpers/prices.helper")
+"use strict";
 
-Router.post('/create', PriceController.create)
+var express = require("express");
+var Router = express.Router();
+var PriceController = require("../helpers/prices.helper");
+
+Router.post('/create', PriceController.create);
 
 module.exports = Router;

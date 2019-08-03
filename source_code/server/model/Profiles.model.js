@@ -1,5 +1,7 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+'use strict';
+
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 var Profile = new Schema({
     name: String,
     address: String,
@@ -9,6 +11,6 @@ var Profile = new Schema({
     Height: Number,
     phone: String,
     activity: Boolean
-})
+});
 
-module.exports = mongoose.model('profiles', Profile)
+module.exports = mongoose.model('profiles', Profile);

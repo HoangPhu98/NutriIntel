@@ -1,68 +1,69 @@
-const express = require('express');
-const logger = require('morgan');
-const bodyParse = require('body-parser');
-const mongoose = require('mongoose');
+var express = require('express');
+var morgan = require('morgan');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
-const config = require('./config');
+var config = require('./config');
+var db = require('./config/database');
+
+var DietModel = require('./model/diet.model.pg');
+var FoodModel = require('./model/food.model.pg');
+var NutrientModel = require('./model/nutrient.model.pg');
+var FoodNutrientModel = require('./model/foodNutrient.model.pg');
+var UnitModel = require('./model/unit.model.pg');
+var DietNutrientModel = require('./model/dietNutrient.model.pg');
+var PriceTableModel = require('./model/priceTable.model.pg');
+
+var NutrientValueAPI = require('./api-routes/nutrientValue.api');
+var OptimizeAPI = require('./api-routes/optimize.api');
+var UnitAPI = require('./api-routes/unit.api');
+var MealPlansAPI = require('./api-routes/mealPlans.api');
+var PricesAPI = require('./api-routes/prices.api');
+var DietAPI = require('./api-routes/diet.api');
 
 
-const db = require('./config/database')
+var app = express();
 
-const DietModel = require('./model/diet.model.pg')
-const FoodModel = require('./model/food.model.pg')
-const NutrientModel = require('./model/nutrient.model.pg')
-const FoodNutrientModel = require('./model/foodNutrient.model.pg')
-const UnitModel = require('./model/unit.model.pg')
-const DietNutrientModel = require('./model/dietNutrient.model.pg')
-
-const nutrientValueAPI = require('./api-routes/nutrientValue.api')
-const optimizeAPI = require("./api-routes/optimize.api")
-const unitAPI = require('./api-routes/unit.api')
-const mealPlanAPI = require('./api-routes/mealPlans.api')
-const priceAPI = require('./api-routes/prices.api')
-const DietAPI = require('./api-routes/diet.api')
-
-const app = express()
-
-app.use(bodyParse.urlencoded({extended: true}))
-app.use(bodyParse.json())
-app.use(logger('dev'))
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json);
+app.use(morgan('dev'));
 
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-    next()
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
 });
 
-var connectionString = 'mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name
-mongoose.connect(connectionString, {useNewUrlParser: true})
-mongoose.Promise = global.Promise
+var connectionString = 'mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name;
+mongoose.connect(connectionString, { useNewUrlParser: true });
+Promise = global.Promise
 
-db.authenticate()
-    .then(() => {
-        UnitModel.sync();
-        DietModel.sync();
-        FoodModel.sync();
-        NutrientModel.sync();
-        FoodNutrientModel.sync();
-        DietNutrientModel.sync();
-        console.log('Database connected...')
-    })
-    .catch(err => console.error('Error: ' + err))
+db.authenticate().then(function () {
+    // UnitModel.sync();
+    // DietModel.sync();
+    // FoodModel.sync();
+    // NutrientModel.sync();
+    // FoodNutrientModel.sync();
+    // DietNutrientModel.sync();
+    // PriceTableModel.sync();
+    console.log('___________________Database connected______________________');
+}).catch(function (err) {
+    return console.error('Error: ' + err);
+});
 
-
-
-app.get('/', (req, res) => {
+app.get('/', function (req, res) {
     return res.json({
         status: 200
-    })
+    });
 });
 
-app.use('/nutrientValue', nutrientValueAPI)
-app.use('/optimize', optimizeAPI)
-app.use('/unit', unitAPI)
-app.use('/mealPlan', mealPlanAPI)
-app.use('/price', priceAPI)
-app.use('/diet', DietAPI)
+app.use('/nutrientValue', NutrientValueAPI);
+app.use('/optimize', OptimizeAPI);
+app.use('/unit', UnitAPI);
+app.use('/mealPlan', MealPlansAPI);
+app.use('/price', PricesAPI);
+app.use('/diet', DietAPI);
 
-app.listen(config.app.port, () => console.log('Server running at port: ' + config.app.port))
+app.listen(config.app.port, function () {
+    return console.log('Server running at port: ' + config.app.port);
+});

@@ -1,10 +1,10 @@
-const express = require('express');
-const DietController = require('../controllers/diet.controller')
+'use strict';
 
-const Router = express.Router();
+var express = require('express');
+var DietController = require('../controllers/diet.controller');
 
+var Router = express.Router();
 
 Router.get('/all', DietController.getAll);
-
 
 module.exports = Router;

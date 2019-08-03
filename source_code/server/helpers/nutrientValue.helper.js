@@ -1,55 +1,48 @@
-const NutrientValue = require('../model/NutrientValue.model');
-const xlsx = require('xlsx');
+'use strict';
 
+var NutrientValue = require('../model/NutrientValue.model');
+var xlsx = require('xlsx');
 
- /**
- * 
- * @param {*} req has body json data same model
- * @param {*} res 
- * @param {*} next 
- */
+/**
+* 
+* @param {*} req has body json data same model
+* @param {*} res 
+* @param {*} next 
+*/
 
-
-const create = async (nutrientValue) => {
-    let xnutrientValue = new NutrientValue(nutrientValue)
+var create = async function create(nutrientValue) {
+    var xnutrientValue = new NutrientValue(nutrientValue);
 
     try {
-        const newNutrient = await xnutrientValue.save();
-        return {err: undefined ,data: newNutrient}
-    } catch(err) {
-        return {err, data: undefined}
+        var newNutrient = await xnutrientValue.save();
+        return { err: undefined, data: newNutrient };
+    } catch (err) {
+        return { err: err, data: undefined };
     }
+};
 
-}
-
-const searchAll = async () => {
+var searchAll = async function searchAll() {
     try {
-        const nutrients = await NutrientValue.find({});
-        return {err: undefined, data: nutrients}
-    } catch(err) {
-        return {err, data: undefined}
+        var nutrients = await NutrientValue.find({});
+        return { err: undefined, data: nutrients };
+    } catch (err) {
+        return { err: err, data: undefined };
     }
-}
+};
 
-const updateOne = (req, res, next) => {
-    NutrientValue
-    .where({_id: req.body._id})
-    .update({$set: req.body})
-    .exec((err, newNutrient) => {
-        if(err) {
+var updateOne = function updateOne(req, res, next) {
+    NutrientValue.where({ _id: req.body._id }).update({ $set: req.body }).exec(function (err, newNutrient) {
+        if (err) {
             return next(err);
         } else {
             res.json(newNutrient);
         }
-    })
-}
+    });
+};
 
-const deleteOne = (req, res, next) => {
-    NutrientValue
-    .where({_id: req.body._id})
-    .deleteOne()
-    .exec((err, result) => {
-        if(err) {
+var deleteOne = function deleteOne(req, res, next) {
+    NutrientValue.where({ _id: req.body._id }).deleteOne().exec(function (err, result) {
+        if (err) {
             return next(err);
         } else {
             res.json(result);
@@ -61,43 +54,43 @@ const deleteOne = (req, res, next) => {
                 }
              */
         }
-    })
-}
+    });
+};
 
-const importData = (req, res, next) => {
-    
-    let workbook = xlsx.readFile('uploads/' + req.file.filename)
-    let sheet_name_list = workbook.SheetNames
-    let xlData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
-    
-    let skip = true;
+var importData = function importData(req, res, next) {
 
-    xlData.forEach(item => {
-        if(skip) {
-            skip = false
+    var workbook = xlsx.readFile('uploads/' + req.file.filename);
+    var sheet_name_list = workbook.SheetNames;
+    var xlData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+
+    var skip = true;
+
+    xlData.forEach(function (item) {
+        if (skip) {
+            skip = false;
         } else {
             /**
              * Validate data in here
              * 
              * 
              */
-            var record = new NutrientValue(item)
+            var record = new NutrientValue(item);
 
-            record.save(err => {
+            record.save(function (err) {
                 if (err) {
                     return next(err);
                 }
-            })
+            });
         }
-    })
+    });
 
     res.json(xlData);
-}
+};
 
 module.exports = {
-    create,
-    searchAll,
-    updateOne,
-    deleteOne,
-    importData
-}
+    create: create,
+    searchAll: searchAll,
+    updateOne: updateOne,
+    deleteOne: deleteOne,
+    importData: importData
+};

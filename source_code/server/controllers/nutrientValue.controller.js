@@ -1,5 +1,10 @@
-const { check, validationResult } = require('express-validator');
-const nutrientValueHelper = require('../helpers/nutrientValue.helper');
+'use strict';
+
+var _require = require('express-validator'),
+    check = _require.check,
+    validationResult = _require.validationResult;
+
+var nutrientValueHelper = require('../helpers/nutrientValue.helper');
 
 /**
 * @api {post} /api/user Create user
@@ -12,42 +17,40 @@ const nutrientValueHelper = require('../helpers/nutrientValue.helper');
 * @apiSuccess (200) {Object} GeneralResponse
 */
 
-const createNutrient = (req, res) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
+var createNutrient = function createNutrient(req, res) {
+    var errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }
 
-    nutrientValueHelper.create(req.body).then((result) => {
-        if(result.err) {
-            res.json({success: false, data: undefined, message: "not ok"})
+    nutrientValueHelper.create(req.body).then(function (result) {
+        if (result.err) {
+            res.json({ success: false, data: undefined, message: "not ok" });
         } else {
             res.json({
-                success: true, 
+                success: true,
                 data: result.data,
                 message: "ok"
-            })
+            });
         }
-    }) 
-}
+    });
+};
 
-
-const getAllNutrient = (req, res) => {
-    nutrientValueHelper.searchAll().then(result => {
-        if(result.err) {
-            res.json({success: false, data: undefined, message: "not ok"})
+var getAllNutrient = function getAllNutrient(req, res) {
+    nutrientValueHelper.searchAll().then(function (result) {
+        if (result.err) {
+            res.json({ success: false, data: undefined, message: "not ok" });
         } else {
             res.json({
-                success: true, 
+                success: true,
                 data: result.data,
                 message: "ok"
-            })
+            });
         }
-    })
-}
-
+    });
+};
 
 module.exports = {
-    createNutrient,
-    getAllNutrient
-}
+    createNutrient: createNutrient,
+    getAllNutrient: getAllNutrient
+};

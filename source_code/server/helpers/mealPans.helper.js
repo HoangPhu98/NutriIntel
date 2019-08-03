@@ -1,43 +1,38 @@
-const MealPlan = require('../model/Menu.model')
-const xlsx = require('xlsx')
+'use strict';
 
-const create = (req, res, next) => {
-    console.log(req.body)
+var MealPlan = require('../model/Menu.model');
+var xlsx = require('xlsx');
+
+var create = function create(req, res, next) {
+    console.log(req.body);
     //Process from form
 
+};
 
-}
-
-const searchAll = (req, res, next) => {
-    MealPlan
-    .find({})
-    .exec((err, allPlan) => {
-        if(err) {
-            return next(err)
-        }else{
-            res.json(allPlan)
+var searchAll = function searchAll(req, res, next) {
+    MealPlan.find({}).exec(function (err, allPlan) {
+        if (err) {
+            return next(err);
+        } else {
+            res.json(allPlan);
         }
-    })
-}
+    });
+};
 
-const updateOne = (req, res, next) => {
-    
-}
+var updateOne = function updateOne(req, res, next) {};
 
-const deleteOne = (req, res, next) => {
+var deleteOne = function deleteOne(req, res, next) {};
 
-}
+var importData = function importData(req, res, next) {
+    var workbook = xlsx.readFile('uploads/' + req.file.filename);
+    var sheet_name_list = workbook.SheetNames;
+    var xData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
 
-const importData = (req, res, next) => {
-    let workbook = xlsx.readFile('uploads/' + req.file.filename)
-    let sheet_name_list = workbook.SheetNames
-    let xData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
-
-    let tempVal
-    xData.map((value, key) => {
-        if(key !== 0) {
-            if(key % 2 === 0) {
-                let item = {
+    var tempVal = void 0;
+    xData.map(function (value, key) {
+        if (key !== 0) {
+            if (key % 2 === 0) {
+                var item = {
                     name: tempVal.name,
                     description: tempVal.description,
                     createAt: new Date(),
@@ -82,31 +77,30 @@ const importData = (req, res, next) => {
                         cholesterol: [tempVal.cholesterol, value.cholesterol],
                         phytosterol: [tempVal.phytosterol, value.phosphorous]
                     }
-                }
 
-                /**
-                 * Validate data in here
-                 */
-                console.log(item);
-                let record = new MealPlan(item)
-                record.save(err => {
-                    if(err) {
-                        return next(err)
+                    /**
+                     * Validate data in here
+                     */
+                };console.log(item);
+                var record = new MealPlan(item);
+                record.save(function (err) {
+                    if (err) {
+                        return next(err);
                     }
-                })
-            }else{
+                });
+            } else {
                 tempVal = value;
             }
         }
-    })
+    });
 
-    res.json({status: 'ok'})
-}
+    res.json({ status: 'ok' });
+};
 
 module.exports = {
-    create,
-    searchAll,
-    updateOne,
-    deleteOne,
-    importData
-}
+    create: create,
+    searchAll: searchAll,
+    updateOne: updateOne,
+    deleteOne: deleteOne,
+    importData: importData
+};

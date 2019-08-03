@@ -1,14 +1,16 @@
-const Diet = require('../model/diet.model.pg').default.default
+'use strict';
 
-const findAll = async () => {
+var Diet = require('../model/diet.model.pg').default.default;
+
+var findAll = async function findAll() {
     try {
-        const diets = await Diet.findAll()
-        return {err: undefined, data: diets}
-    } catch(err) {
-        return {err, data: undefined}
+        var diets = await Diet.findAll();
+        return { err: undefined, data: diets };
+    } catch (err) {
+        return { err: err, data: undefined };
     }
-}
+};
 
 module.exports = {
-    findAll,
-}
+    findAll: findAll
+};

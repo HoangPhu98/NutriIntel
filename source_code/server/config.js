@@ -1,6 +1,8 @@
-const env = process.env.NODE_ENV;
+'use strict';
 
-const dev = {
+var env = process.env.NODE_ENV;
+
+var dev = {
     app: {
         port: parseInt(process.env.DEV_APP_PORT) || 3001
     },
@@ -11,7 +13,7 @@ const dev = {
     }
 };
 
-const test = {
+var test = {
     app: {
         port: parseInt(process.env.TEST_APP_PORT) || 3001
     },
@@ -22,9 +24,9 @@ const test = {
     }
 };
 
-const config = {
-    dev,
-    test
-}
+var config = {
+    dev: dev,
+    test: test
+};
 
 module.exports = config.dev;

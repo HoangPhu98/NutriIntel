@@ -1,7 +1,9 @@
-const express = require('express')
-const Router = express.Router()
-const UnitController = require('../helpers/units.helper')
+'use strict';
 
-Router.get('/', UnitController.searchAll)
+var express = require('express');
+var Router = express.Router();
+var UnitController = require('../helpers/units.helper');
 
-module.exports = Router
+Router.get('/', UnitController.searchAll);
+
+module.exports = Router;

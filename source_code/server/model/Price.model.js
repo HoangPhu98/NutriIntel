@@ -1,11 +1,12 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-const NutrientValue = require('./NutrientValue.model')
+'use strict';
 
-const Price = new Schema({
-    food: {type: Schema.Types.ObjectId, res: 'NutrientValue'},
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var NutrientValue = require('./NutrientValue.model');
+
+var Price = new Schema({
+    food: { type: Schema.Types.ObjectId, res: 'NutrientValue' },
     price: Number
-})
+});
 
-
-module.exports = mongoose.model('prices', Price)
+module.exports = mongoose.model('prices', Price);

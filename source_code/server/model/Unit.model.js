@@ -1,16 +1,18 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+'use strict';
+
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 var Field = new Schema({
     key: String,
     name: String,
     unit_1: String,
     unit_2: String
-})
+});
 
-const Units = new Schema({
+var Units = new Schema({
     fields: [Field]
-})
+});
 
 module.exports = mongoose.model('units', Units);
 

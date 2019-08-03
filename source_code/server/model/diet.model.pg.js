@@ -1,19 +1,19 @@
-const Sequelize = require('sequelize')
-const db = require('../config/database')
+var sequelize = require('sequelize');
+var database = require('../config/database');
 
-const Diet = db.define('diets', {
+var Diet = database.define('diets', {
     nameVi: {
-        type: Sequelize.STRING,
+        type: sequelize.STRING,
         allowNull: false
     }, nameEn: {
-        type: Sequelize.STRING
+        type: sequelize.STRING
     }, description: {
-        type: Sequelize.TEXT
+        type: sequelize.TEXT
     }, image: {
-        type: Sequelize.STRING
+        type: sequelize.STRING
     }
 }, {
-    freezeTableName: true,
-})
+    freezeTableName: true
+});
 
-module.exports = Diet
+module.exports = Diet;

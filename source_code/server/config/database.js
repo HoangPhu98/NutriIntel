@@ -1,4 +1,6 @@
-const Sequelize = require('sequelize')
+'use strict';
+
+var Sequelize = require('sequelize');
 
 module.exports = new Sequelize('nutri_intel', 'postgres', '1', {
     host: 'localhost',
@@ -8,5 +10,5 @@ module.exports = new Sequelize('nutri_intel', 'postgres', '1', {
         min: 0,
         acquire: 30000,
         idle: 10000
-    },
+    }
 });

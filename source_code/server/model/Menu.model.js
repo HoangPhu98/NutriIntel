@@ -1,5 +1,7 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+'use strict';
+
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 var Menu = new Schema({
     name: String,
@@ -46,8 +48,6 @@ var Menu = new Schema({
         cholesterol: [Number],
         phytosterol: [Number]
     }
-})
+});
 
-
-
-module.exports = mongoose.model('meal_plans', Menu)
+module.exports = mongoose.model('meal_plans', Menu);

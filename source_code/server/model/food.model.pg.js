@@ -1,13 +1,13 @@
-const Sequelize = require('sequelize')
-const db = require('../config/database')
+var Sequelize = require('sequelize');
+var db = require('../config/database');
 
-const Food = db.define('foods', {
+var Food = db.define('foods', {
     nameVi: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true
     }, nameEn: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
     }, description: {
         type: Sequelize.TEXT
     }, image: {

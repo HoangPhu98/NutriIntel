@@ -1,8 +1,8 @@
-const Sequelize = require('sequelize')
-const db = require('../config/database')
-const Unit = require('./unit.model.pg')
+var Sequelize = require('sequelize');
+var db = require('../config/database');
+var Unit = require('./unit.model.pg');
 
-const Nutrient = db.define('nutrients', {
+var Nutrient = db.define('nutrients', {
     nameVi: {
         type: Sequelize.Sequelize.STRING,
         allowNull: false,
@@ -15,8 +15,9 @@ const Nutrient = db.define('nutrients', {
         type: Sequelize.STRING
     }, description: {
         type: Sequelize.STRING
-    }, 
+    }
 });
 
-Nutrient.hasOne(Unit, {as: 'unit', foreignKey: 'unitId'})
+Nutrient.hasOne(Unit, { as: 'unit', foreignKey: 'unitId' });
+
 module.exports = Nutrient;

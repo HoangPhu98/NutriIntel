@@ -1,10 +1,9 @@
-const Sequelize = require('sequelize')
-const db = require('../config/database')
-const Nutrient = require('./nutrient.model.pg')
-const Food = require('./food.model.pg')
+var Sequelize = require('sequelize');
+var database = require('../config/database');
+var NutrientModel = require('./nutrient.model.pg');
+var FoodModel = require('./food.model.pg');
 
-
-const FoodNutrient = db.define('food_nutrients', {
+var FoodNutrient = database.define('food_nutrients', {
     value: {
         type: Sequelize.FLOAT,
         allowNull: false,
@@ -19,9 +18,9 @@ const FoodNutrient = db.define('food_nutrients', {
             min: 0
         }
     }
-})
+});
 
-Food.belongsToMany(Nutrient, {as: 'nutrients', through: FoodNutrient, foreignKey: 'foodId', onDelete: 'RESTRICT'})
-Nutrient.belongsToMany(Food, {through: FoodNutrient, foreignKey: 'nutrientId', onDelete: 'RESTRICT'})
+FoodModel.belongsToMany(NutrientModel, { as: 'nutrients', through: FoodNutrient, foreignKey: 'foodId', onDelete: 'RESTRICT' });
+NutrientModel.belongsToMany(FoodModel, { through: FoodNutrient, foreignKey: 'nutrientId', onDelete: 'RESTRICT' });
 
-module.exports = FoodNutrient
+module.exports = FoodNutrient;

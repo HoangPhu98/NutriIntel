@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
-const config = require('./config');
+'use strict';
 
-const {
-    db: {
-        host,
-        port,
-        name
-    }
-} = config;
+var mongoose = require('mongoose');
+var config = require('./config');
 
-const connectionString = 'mongodb://${host}:${port}/${name}';
+var _config$db = config.db,
+    host = _config$db.host,
+    port = _config$db.port,
+    name = _config$db.name;
+
+
+var connectionString = 'mongodb://${host}:${port}/${name}';
 mongoose.connect(connectionString);
