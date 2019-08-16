@@ -10,7 +10,7 @@ var Unit = db.define('units', {
     nameEn: {
         type: Sequelize.STRING
     },
-    notaion: {
+    notation: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true

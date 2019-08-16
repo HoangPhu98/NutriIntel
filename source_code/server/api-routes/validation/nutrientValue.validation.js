@@ -5,7 +5,5 @@ var _require = require('express-validator'),
     validationResult = _require.validationResult;
 
 module.exports = {
-
     createNutrient: [check("name").isString().exists()]
-
 };

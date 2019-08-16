@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
+import propTypes from 'prop-types';
+import {withStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -12,28 +13,147 @@ import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MainListItem from '../MainListItem/mainListItem'
 import FoodTable from '../FoodTable/foodTable';
+import Paper from '@material-ui/core/Paper';
+import Diet from '../Diet/Diet';
 
-function MadeWithLove() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Built with love by the '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Material-UI
-      </Link>
-      {' team.'}
-    </Typography>
-  );
+
+const DASH_BOARD = "Dashboard";
+
+class Dashboard extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: true,
+      onPage: DASH_BOARD,
+    }
+
+    this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
+    this.handleDrawerClose = this.handleDrawerClose.bind(this);
+    this.handleItemClick = this.handleItemClick.bind(this)
+  }
+
+  handleDrawerOpen = () => {
+    this.setState({open: true})
+  };
+
+  handleDrawerClose = () => {
+    this.setState({open: false})
+  };
+
+  handleItemClick = (index) => {
+    switch (index) {
+      case 1:
+        this.setState({onPage: DASH_BOARD})
+        break;
+      case 2: 
+        this.setState({onPage: "Food"})
+        break;
+      case 3: 
+        this.setState({onPage: "Diet"})
+        break;
+      default:
+          this.setState({onPage: "Dashboard"})
+        break;
+    }
+  }
+
+  render() {
+    const {classes} = this.props;
+    const {open, onPage} = this.state;
+
+    return (
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+          <Toolbar className={classes.toolbar}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={this.handleDrawerOpen}
+              className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+            >
+            <MenuIcon />
+            </IconButton>
+            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+              Dashboard
+            </Typography>
+            <IconButton color="inherit">
+              <Badge badgeContent={100} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={this.handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <List><MainListItem selectItem={this.handleItemClick} /></List>
+          <Divider />
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            { onPage === "Dashboard" &&
+              (
+                <Grid container spacing={2}>
+                Chart
+                <Grid item xs={12} md={8} lg={9}>
+                  <Paper>
+                    
+                  </Paper>
+                </Grid>
+                Recent Deposits
+                <Grid item xs={12} md={4} lg={3}>
+                  <Paper>
+                  </Paper>
+                </Grid>
+                <Grid item xs={12}>
+                  <FoodTable />
+                </Grid>
+              </Grid>
+              )              
+            }
+            {
+              onPage === "Food" && 
+              (
+                <div>Food Table</div>
+              )
+            }
+            {
+              onPage === "Diet" &&
+              (
+                <Diet />
+              )
+            }
+            
+          </Container>
+        </main>
+      </div>
+    );
+  }
 }
+
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   root: {
     display: 'flex',
   },
@@ -110,82 +230,10 @@ const useStyles = makeStyles(theme => ({
   fixedHeight: {
     height: 240,
   },
-}));
+});
 
-export default function Dashboard() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="Open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-          <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={100} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List><MainListItem /></List>
-        <Divider />
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={2}>
-            {/* Chart */}
-            {/* <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                
-              </Paper>
-            </Grid> */}
-            {/* Recent Deposits */}
-            {/* <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
-              </Paper>
-            </Grid> */}
-            <Grid item xs={12}>
-              <FoodTable />
-            </Grid>
-          </Grid>
-        </Container>
-        <MadeWithLove />
-      </main>
-    </div>
-  );
+Dashboard.propTypes = {
+  classes: propTypes.object.isRequired
 }
+
+export default withStyles(styles)(Dashboard);

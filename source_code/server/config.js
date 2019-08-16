@@ -4,7 +4,7 @@ var env = process.env.NODE_ENV;
 
 var dev = {
     app: {
-        port: parseInt(process.env.DEV_APP_PORT) || 3001
+        port: parseInt(process.env.DEV_APP_PORT) || 4004
     },
     db: {
         host: process.env.DEV_DB_HOST || 'localhost',
@@ -15,7 +15,7 @@ var dev = {
 
 var test = {
     app: {
-        port: parseInt(process.env.TEST_APP_PORT) || 3001
+        port: parseInt(process.env.TEST_APP_PORT) || 4004
     },
     db: {
         host: process.env.TEST_DB_HOST || 'localhost',

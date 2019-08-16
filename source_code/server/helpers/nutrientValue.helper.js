@@ -1,14 +1,6 @@
-'use strict';
-
 var NutrientValue = require('../model/NutrientValue.model');
 var xlsx = require('xlsx');
 
-/**
-* 
-* @param {*} req has body json data same model
-* @param {*} res 
-* @param {*} next 
-*/
 
 var create = async function create(nutrientValue) {
     var xnutrientValue = new NutrientValue(nutrientValue);

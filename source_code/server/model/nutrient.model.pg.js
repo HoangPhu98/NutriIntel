@@ -11,13 +11,11 @@ var Nutrient = db.define('nutrients', {
         }
     }, nameEn: {
         type: Sequelize.STRING
-    }, scientName: {
-        type: Sequelize.STRING
     }, description: {
         type: Sequelize.STRING
     }
 });
 
-Nutrient.hasOne(Unit, { as: 'unit', foreignKey: 'unitId' });
+Unit.hasOne(Nutrient, { as: 'nutrients', foreignKey: 'unitId' });
 
 module.exports = Nutrient;

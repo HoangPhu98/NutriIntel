@@ -1,7 +1,8 @@
-var express = require('express');
-var morgan = require('morgan');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
+const express = require('express');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const fileUpload = require('express-fileupload');
 
 var config = require('./config');
 var db = require('./config/database');
@@ -14,6 +15,8 @@ var UnitModel = require('./model/unit.model.pg');
 var DietNutrientModel = require('./model/dietNutrient.model.pg');
 var PriceTableModel = require('./model/priceTable.model.pg');
 
+const NutrientAPI = require('./api-routes/nutrient.api');
+
 var NutrientValueAPI = require('./api-routes/nutrientValue.api');
 var OptimizeAPI = require('./api-routes/optimize.api');
 var UnitAPI = require('./api-routes/unit.api');
@@ -22,11 +25,12 @@ var PricesAPI = require('./api-routes/prices.api');
 var DietAPI = require('./api-routes/diet.api');
 
 
-var app = express();
+const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json);
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use(morgan('dev'));
+app.use(fileUpload());
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -34,15 +38,16 @@ app.use(function (req, res, next) {
     next();
 });
 
+
 var connectionString = 'mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name;
 mongoose.connect(connectionString, { useNewUrlParser: true });
 Promise = global.Promise
 
 db.authenticate().then(function () {
     // UnitModel.sync();
+    // NutrientModel.sync();
     // DietModel.sync();
     // FoodModel.sync();
-    // NutrientModel.sync();
     // FoodNutrientModel.sync();
     // DietNutrientModel.sync();
     // PriceTableModel.sync();
@@ -51,11 +56,8 @@ db.authenticate().then(function () {
     return console.error('Error: ' + err);
 });
 
-app.get('/', function (req, res) {
-    return res.json({
-        status: 200
-    });
-});
+
+app.use('/nutrient', NutrientAPI);
 
 app.use('/nutrientValue', NutrientValueAPI);
 app.use('/optimize', OptimizeAPI);
@@ -64,6 +66,7 @@ app.use('/mealPlan', MealPlansAPI);
 app.use('/price', PricesAPI);
 app.use('/diet', DietAPI);
 
-app.listen(config.app.port, function () {
-    return console.log('Server running at port: ' + config.app.port);
-});
+app.get('/', (req, res) => res.send('Hello World!'))
+
+const port = config.app.port;
+app.listen(port, () => console.log('Server running at port: ' + port));
