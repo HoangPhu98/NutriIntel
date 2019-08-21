@@ -45,7 +45,7 @@ Promise = global.Promise
 
 db.authenticate().then(function () {
     // UnitModel.sync();
-    // NutrientModel.sync();
+    NutrientModel.sync();
     // DietModel.sync();
     // FoodModel.sync();
     // FoodNutrientModel.sync();
@@ -58,7 +58,6 @@ db.authenticate().then(function () {
 
 
 app.use('/nutrient', NutrientAPI);
-
 app.use('/nutrientValue', NutrientValueAPI);
 app.use('/optimize', OptimizeAPI);
 app.use('/unit', UnitAPI);

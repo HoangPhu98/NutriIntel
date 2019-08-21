@@ -1,23 +1,24 @@
 var Nutrient = require('../model/nutrient.model.pg');
 var db = require('../config/database');
-
+const Unit = require('../model/unit.model.pg')
 
 const create = async (data) => {
     let err = undefined;
-    let returnValue = undefined;
+    let createdNutrient = undefined;
 
     try {
-        let createdNutrient = await Nutrient.create({
+        createdNutrient = await Nutrient.create({
+            code: data.code,
             nameVi: data.nameVi,
             nameEn: data.nameEn,
-            description: data.description
+            description: data.description,
+            unitCode: data.unitCode
         });
-        returnValue = createdNutrient;
     } catch(err) {
         err = err;
     }
     db.close();
-    return {returnValue, err};
+    return {createdNutrient, err};
 }
 
 const update = async (id, data) => {
@@ -43,7 +44,7 @@ const retrieve = async () => {
     let nutrients = undefined;
 
     try {
-        nutrients = await Nutrient.findAll();
+        nutrients = await Nutrient.findAll({include: [Unit]});
     } catch(err) {
         err = err
     }
@@ -69,8 +70,19 @@ const remove = async (id) => {
     return {err}
 }
 
-const createMulti = async () => {
+const createMulti = async (nutrients) => {
+    let err = undefined
+    let createdNutrients = undefined
 
+    try {
+        createdNutrients = await Nutrient.bulkCreate(nutrients, {returning: true}).then()
+    } catch (e) {
+        // should be passed return back controller and show in response
+        console.log(e)
+
+    }
+
+    return {err, createdNutrients}
 }
 
 module.exports = {

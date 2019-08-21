@@ -2,21 +2,21 @@ var Unit = require('../model/unit.model.pg');
 var db = require('../config/database')
 
 const create = async (data) => {
-    let err = undefined;
-    let returnValue = undefined;
+    let err = undefined
+    let createdUnit = undefined
     try {
         createdUnit = await Unit.create({
+            code: data.code,
             nameVi: data.nameVi,
             nameEn: data.nameEn,
             notation: data.notaion,
             note: data.note
         });
-        returnValue = createdUnit;
     } catch(err) {
         err = err;
     }
     db.close();
-    return {returnValue, err};
+    return {createdUnit, err};
 }
 
 const update = async (id, data) => {

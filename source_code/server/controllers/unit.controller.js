@@ -10,7 +10,6 @@ const create = (req, res) => {
     }
 
     UnitHelper.create(req.body).then((result) => {
-        console.log(result)
         if(result.err) {
             console.log(result.err);
             res.json({
@@ -22,7 +21,7 @@ const create = (req, res) => {
         }
         res.json({
             success: true,
-            data: result.returnValue,
+            data: result.createdUnit,
             message: "ok"
         });
     });
@@ -81,6 +80,10 @@ const update = (req, res) => {
     let id = parseInt(req.params.id);
     let infoUpdate = {}
     let flagEnableUpdate = false;
+    if(req.body.code !== undefined) {
+        infoUpdate.code = req.body.code;
+        flagEnableUpdate = true;
+    }
     if(req.body.nameVi !== undefined) {
         infoUpdate.nameVi = req.body.nameVi;
         flagEnableUpdate = true;
@@ -178,6 +181,7 @@ const importData = (req, res) => {
                     let units = [];
                     result.forEach(element => {
                         let unit = {
+                            code: element.code,
                             nameVi: element.namevi,
                             nameEn: element.nameen,
                             notation: element.symboy,
