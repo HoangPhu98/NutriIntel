@@ -1,8 +1,13 @@
 var Sequelize = require('sequelize');
 var db = require('../config/database');
-const Nutrient = require('./nutrient.model.pg');
+const GroupModel = require('./group.model.pg')
 
 var Food = db.define('foods', {
+    foodCode: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
+    },
     nameVi: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -15,5 +20,7 @@ var Food = db.define('foods', {
         type: Sequelize.STRING
     }
 });
+
+Food.belongsTo(GroupModel, {foreignKey: 'groupCode', targetKey: 'code'})
 
 module.exports = Food;
