@@ -1,5 +1,6 @@
 var Sequelize = require('sequelize');
 var db = require('../config/database');
+const Nutrient = require('./nutrient.model.pg');
 
 var Food = db.define('foods', {
     nameVi: {

@@ -23,7 +23,7 @@ var UnitAPI = require('./api-routes/unit.api');
 var MealPlansAPI = require('./api-routes/mealPlans.api');
 var PricesAPI = require('./api-routes/prices.api');
 var DietAPI = require('./api-routes/diet.api');
-
+const FoodAPI = require('./api-routes/food.api')
 
 const app = express();
 
@@ -65,6 +65,7 @@ app.use('/unit', UnitAPI);
 app.use('/mealPlan', MealPlansAPI);
 app.use('/price', PricesAPI);
 app.use('/diet', DietAPI);
+app.use('/food', FoodAPI)
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
