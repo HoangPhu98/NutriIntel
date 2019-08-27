@@ -20,18 +20,17 @@ var FoodNutrient = database.define('food_nutrients', {
     }
 });
 
+
 FoodModel.belongsToMany(NutrientModel, {
     as: 'nutrients', 
     through: FoodNutrient, 
-    foreignKey: 'foodCode', 
-    sourceKey: 'foodcode', 
+    foreignKey: 'foodId',
     onDelete: 'RESTRICT' 
 });
 
 NutrientModel.belongsToMany(FoodModel, { 
     through: FoodNutrient, 
-    foreignKey: 'nutrientCode', 
-    sourceKey: 'nutrientCode', 
+    foreignKey: 'nutrientId',
     onDelete: 'RESTRICT' 
 });
 

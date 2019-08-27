@@ -1,5 +1,7 @@
 const Food = require('../model/food.model.pg')
+const Nutrient = require('../model/nutrient.model.pg')
 const db = require('../config/database')
+const FoodNutrient = require('../model/foodNutrient.model.pg')
 
 const create = async (food) => {
     let err = undefined
@@ -56,17 +58,27 @@ const filter = async (pageSize, pageNo) => {
 const createMulti = async (foods) => {
     let createdFoods = undefined
     let err = undefined
-
+    
     try {
-        createdFoods = await Food.bulkCreate(foods, {returning: true}).then()
+        nutrients = await Nutrient.findAll()
+
+        createdFoods = await Food.bulkCreate(foods, {returning: true, include: Nutrient}).then()
+        await createdFoods.map((food, index) => {
+            foods[index].nutrients.map((nutrient, index) => {
+                let nu = nutrients.filter(nut => nut.code == nutrient.nutrientCode)
+                food.addNutrient(nu[0], {through: {
+                    amount: nutrient.amount,
+                    value: nutrient.value
+                }})
+            })
+        })
+
+        Sequelize.sync()
     } catch(err) {
         err = err;
     }
-
-    // create value nutrient in here
-    
-
-    db.close();
+  
+    // db.close();
     return {err, createdFoods}
 }
 

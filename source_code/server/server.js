@@ -59,7 +59,7 @@ db.authenticate().then(function () {
     // GroupModel.sync()
     // DietModel.sync()
     // FoodModel.sync()
-    // FoodNutrientModel.sync();
+    FoodNutrientModel.sync();
     // DietNutrientModel.sync();
     // PriceTableModel.sync();
     console.log('___________________Database connected______________________');
