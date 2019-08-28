@@ -1,6 +1,7 @@
 Step by step to run program in local:
 1. Start Datatbase System:
-	mongod --dbpath="D:\MongoDB\data\db"
+	v1: mongod --dbpath="D:\MongoDB\data\db"
+	v2: run postgres server: create database nutri_intel
 2. Start Server:
 	cd server
 	npm start
