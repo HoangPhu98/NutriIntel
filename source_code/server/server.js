@@ -49,8 +49,8 @@ app.use(function (req, res, next) {
 /**
  * _____Connect database and sync that_____
  */
-var connectionString = 'mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name;
-mongoose.connect(connectionString, { useNewUrlParser: true });
+// var connectionString = 'mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name;
+// mongoose.connect(connectionString, { useNewUrlParser: true });
 Promise = global.Promise
 
 db.authenticate().then(function () {
@@ -59,7 +59,7 @@ db.authenticate().then(function () {
     // GroupModel.sync()
     // DietModel.sync()
     // FoodModel.sync()
-    FoodNutrientModel.sync();
+    // FoodNutrientModel.sync();
     // DietNutrientModel.sync();
     // PriceTableModel.sync();
     console.log('___________________Database connected______________________');

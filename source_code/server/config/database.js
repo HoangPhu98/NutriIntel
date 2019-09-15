@@ -2,7 +2,7 @@
 
 var Sequelize = require('sequelize');
 
-module.exports = new Sequelize('nutri_intel', 'postgres', '1', {
+module.exports = new Sequelize('nutri_intel', 'postgres', '123456', {
     host: 'localhost',
     dialect: 'postgres',
     pool: {

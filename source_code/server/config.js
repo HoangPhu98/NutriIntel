@@ -7,6 +7,8 @@ var dev = {
         port: parseInt(process.env.DEV_APP_PORT) || 4004
     },
     db: {
+        username: process.env.DEV_DB_HOST ||'postgres',
+        password: process.env.DEV_APP_PORT || '123456',
         host: process.env.DEV_DB_HOST || 'localhost',
         port: parseInt(process.env.DEV_DB_PORT) || 27017,
         name: process.env.DEV_DB_NAME || 'nutri_intel'
