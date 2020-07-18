@@ -1,26 +1,57 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import UnitPage from './components/Manage/ManageUnit/UnitPage'
+import {connect} from 'react-redux'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {createUnit, editUnit, fetchUnits} from './actions'
+import Layout from './components/Drawer/Drawer';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import AboutPage from './components/About/AboutPage';
+import HomePage from './components/Home/HomePage';
+import SchedulePage from './components/Schedule/SchedulePage';
+import ManagePage from './components/Manage/ManagePage';
+
+class App extends React.Component {
+  componentDidMount() {
+    this.props.dispatch(fetchUnits())
+  }
+
+  onCreateUnit = ({nameVi, notation}) => {
+    this.props.dispatch(createUnit({nameVi, notation}))
+  }
+
+  onEditUnit = ({id, nameVi, notation}) => {
+    this.props.dispatch(editUnit({id, nameVi, notation}))
+  }
+
+  render() {
+    return (
+      <Router>
+        <Layout>
+          <div>
+              <Switch>
+                <Route path="/" exact component={HomePage}/>
+                <Route path="/about" component={AboutPage}/>
+                <Route path="/schedule" component={SchedulePage}/>
+                <Route path="/manage" exact component={ManagePage}/>
+                <Route 
+                  path="/manage-unit" 
+                  render={() => <UnitPage 
+                    units={this.props.units} 
+                    onCreateUnit={this.onCreateUnit}
+                    onEditUnit={this.onEditUnit}
+                    />} />
+              </Switch>
+          </div>
+        </Layout>
+      </Router>
+    );
+  }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    units: state.units
+  }
+}
+
+export default connect(mapStateToProps) (App);
